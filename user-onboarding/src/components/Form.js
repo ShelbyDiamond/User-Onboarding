@@ -35,6 +35,10 @@ const OnboardingForm = ({ touched, errors, status, values, handleSubmit }) => {
           />
         </label>
         <button type="submit">Submit</button>
+
+        {user.map(person => (
+          <p key={person.id}>{person.name}</p>
+        ))}
       </Form>
     </div>
   )
@@ -56,12 +60,12 @@ const FormikOnboardingForm = withFormik({
   handleSubmit(values, { setStatus }) {
     axios
       .post("https://reqres.in/api/users/", values)
-      .then(res => {
-        console.log("post api response", res)
-        setStatus(res.data)
+      .then(response => {
+        console.log("post api response", response)
+        setStatus(response.data)
         console.log("current user", values)
       })
-      .catch(err => console.log(err.response))
+      .catch(error => console.log(error.response))
   }
 })(OnboardingForm)
 
