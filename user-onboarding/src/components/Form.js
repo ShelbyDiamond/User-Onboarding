@@ -92,25 +92,31 @@ const OnboardingForm = ({ touched, errors, status, values, handleSubmit }) => {
 }
 
 const FormikOnboardingForm = withFormik({
-  mapPropsToValues({ name, password, email }) {
+  mapPropsToValues({ name, password, email, serviceTerms }) {
     return {
       name: name || "",
       password: password || "",
-      email: email || ""
+      email: email || "",
+      serviceTerms: serviceTerms || true
     }
   },
 
-  validateSchema: Yup.object().shape({
-    password: Yup.string().required("ayye")
+  validationSchema: Yup.object().shape({
+    name: Yup.string().required("YOU FORGOT YOUR NAME SON!"),
+    password: Yup.string().required(
+      "EH HEM... aren't you forgetting to lock up?"
+    ),
+    email: Yup.string().required("Name's Taken!")
   }),
 
-  handleSubmit(values, { setStatus }) {
+  handleSubmit(values, { setStatus, resetForm }) {
     axios
       .post("https://reqres.in/api/users/", values)
       .then(response => {
         console.log("post api response", response)
         setStatus(response.data)
         console.log("current user", values)
+        resetForm()
       })
       .catch(error => console.log(error.response))
   }
